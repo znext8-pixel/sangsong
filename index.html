@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Song Dedicated For You</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #8b5cf6;
+      --accent-hover: #7c3aed;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 550px;
+      background-color: var(--card-bg);
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 8px;
+      text-align: center;
+      color: var(--text);
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgba(0, 0, 0, 0.2);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: var(--accent-hover);
+    }
+
+    /* Dedication View */
+    .card-view {
+      display: none;
+      text-align: center;
+    }
+
+    .card-header {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .recipient-name {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .message-box {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      font-style: italic;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      background: #000;
+    }
+
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .sender-tag {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .share-container {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: none;
+    }
+
+    .share-link-box {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .share-link-box input {
+      font-size: 0.85rem;
+    }
+
+    .share-link-box button {
+      width: auto;
+      padding: 0 16px;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Form View -->
+    <div id="formView">
+      <h1>Dedicate a Song</h1>
+      <p class="subtitle">Send a special song and message to someone.</p>
+      
+      <form id="dedicationForm">
+        <div class="form-group">
+          <label for="recipient">Who is this for?</label>
+          <input type="text" id="recipient" placeholder="e.g. Alex" required />
+        </div>
+
+        <div class="form-group">
+          <label for="youtubeUrl">YouTube Video URL</label>
+          <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=..." required />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" placeholder="Write a note to accompany the song..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="sender">From (Your Name)</label>
+          <input type="text" id="sender" placeholder="e.g. Sam" required />
+        </div>
+
+        <button type="submit">Create Dedication</button>
+      </form>
+
+      <div id="shareContainer" class="share-container">
+        <label>Shareable Dedication Link:</label>
+        <div class="share-link-box">
+          <input type="text" id="shareUrl" readonly />
+          <button id="copyBtn" onclick="copyShareLink()">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dedication Card View -->
+    <div id="cardView" class="card-view">
+      <div class="card-header">A song dedicated to</div>
+      <h2 id="viewRecipient" class="recipient-name"></h2>
+      
+      <div id="viewMessage" class="message-box"></div>
+      
+      <div class="video-container">
+        <iframe id="youtubeEmbed" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <div class="sender-tag">With love, from <strong id="viewSender" style="color: var(--text);"></strong></div>
+
+      <button onclick="createNew()">Create Your Own Dedication</button>
+    </div>
+  </div>
+
+  <script>
+    // Extract YouTube ID from various URL formats
+    function getYouTubeId(url) {
+      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    // Convert form input into base64 URL params
+    document.getElementById('dedicationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const recipient = document.getElementById('recipient').value;
+      const youtubeUrl = document.getElementById('youtubeUrl').value;
+      const message = document.getElementById('message').value;
+      const sender = document.getElementById('sender').value;
+
+      const videoId = getYouTubeId(youtubeUrl);
+      if (!videoId) {
+        alert('Please enter a valid YouTube URL');
+        return;
+      }
+
+      const data = { r: recipient, v: videoId, m: message, s: sender };
+      const encodedData = btoa(encodeURIComponent(JSON.stringify(data)));
+      
+      const shareUrl = `${window.location.origin}${window.location.pathname}?d=${encodedData}`;
+      
+      document.getElementById('shareUrl').value = shareUrl;
+      document.getElementById('shareContainer').style.display = 'block';
+    });
+
+    function copyShareLink() {
+      const shareUrlInput = document.getElementById('shareUrl');
+      shareUrlInput.select();
+      navigator.clipboard.writeText(shareUrlInput.value);
+      
+      const copyBtn = document.getElementById('copyBtn');
+      copyBtn.innerText = 'Copied!';
+      setTimeout(() => copyBtn.innerText = 'Copy', 2000);
+    }
+
+    // Load card if URL parameter 'd' exists
+    function loadFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const encodedData = urlParams.get('d');
+
+      if (encodedData) {
+        try {
+          const decodedData = JSON.parse(decodeURIComponent(atob(encodedData)));
+
+          document.getElementById('viewRecipient').innerText = decodedData.r;
+          document.getElementById('viewMessage').innerText = `"${decodedData.m}"`;
+          document.getElementById('viewSender').innerText = decodedData.s;
+          document.getElementById('youtubeEmbed').src = `https://www.youtube.com/embed/${decodedData.v}?autoplay=1`;
+
+          document.getElementById('formView').style.display = 'none';
+          document.getElementById('cardView').style.display = 'block';
+        } catch (e) {
+          console.error('Invalid dedication data in URL', e);
+        }
+      }
+    }
+
+    function createNew() {
+      window.location.href = window.location.pathname;
+    }
+
+    window.onload = loadFromUrl;
+  </script>
+</body>
+</html>
